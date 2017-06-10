@@ -147,11 +147,13 @@ Yelp engineers have a good answer for why this happens [here](https://github.com
 
 > However, if the process receiving the signal is PID 1, it gets special treatment by the kernel; if it hasn't registered a handler for the signal, the kernel won't fall back to default behavior, and nothing happens. In other words, if your process doesn't explicitly handle these signals, sending it SIGTERM will have no effect at all.
 
-To solve this (and other) issues, you need a simple init system that has proper signal handlers specified. Luckily `Yelp` engineers built the simple and lightweight init system, `dumb-init`
+To solve this (and other) issues, you need a simple init system that has proper signal handlers specified. Luckily Docker can take care of this for you with the `--init` flag.
 
 ```bash
-docker run quay.io/gravitational/debian-tall /usr/bin/dumb-init /bin/sh -c "sleep 10000"
+docker run --init busybox sleep 10000
 ```
+
+Note: the `--init` flag is not enabled by default to preserve backwards compatibility.
 
 Now you can simply stop `docker run` process using SIGTERM and it will handle shutdown properly
 
